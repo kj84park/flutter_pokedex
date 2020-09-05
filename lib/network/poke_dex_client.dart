@@ -16,7 +16,7 @@ class PokeDexClient {
       List<PokemonLists> pokemonList = list.map((e) {
         String name = e["name"] as String;
         String url = e["url"] as String;
-       return PokemonLists(name,url);
+       return PokemonLists(url,name);
        }).toList();
       return pokemonList;
     } catch (e) {

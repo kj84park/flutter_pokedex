@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_pokedex/network/poke_dex_client.dart';
 
+import 'data/pokemon_lists.dart';
+
 void main() {
   runApp(AnimatedListSample());
 }
@@ -21,22 +23,29 @@ class AnimatedListSample extends StatefulWidget {
 
 class _AnimatedListSampleState extends State<AnimatedListSample> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
-  List<int> _list;
+  List<PokemonLists> _pokemonList;
 
   @override
   void initState() {
     super.initState();
-    _list = [10, 9, 8, 7, 6, 5, 34, 123, 536, 234324, 23635, 239, 1];
-    PokeDexClient().fetchPokemonList();
+    Future<List<PokemonLists>> _list = PokeDexClient().fetchPokemonList();
+    _list.then((value) {
+      setState(() {
+        _pokemonList = value;
+      });
+    });
   }
 
+  String getName(int index){
+    if(_pokemonList == null){
+      return "";
+    }
+    final pokemonMap = _pokemonList.asMap();
+    return pokemonMap[index].name;
+  }
 
   void printText(){
     print("aaaaa");
-  }
-
-  int realIndex(int index){
-    return index+1;
   }
 
   @override
@@ -52,12 +61,15 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
             ),
             body: Padding(
                 padding: const EdgeInsets.all(1.0),
-                child: GridView.count(
+                child: GridView.builder(
                   key: _listKey,
-                  crossAxisCount: 2,
-                  children: List.generate(
-                    20,
-                    (index) => SafeArea(
+                  itemCount: 20,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2
+                  ),
+                  itemBuilder:(context,index) {
+                    int imageIndex = index+1;
+                    return SafeArea(
                       minimum: EdgeInsets.fromLTRB(10, 10, 10, 10),
                       child: FlatButton(
                         color: Colors.amberAccent,
@@ -66,24 +78,25 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                           child: Container(
                             width: 180,
                             height: 180,
-                            margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
                             child: Column(
                               children: [
                                 ExtendedImage.network(
-                                  "https://pokeres.bastionbot.org/images/pokemon/$index.png",
+                                  "https://pokeres.bastionbot.org/images/pokemon/$imageIndex.png",
                                   width: 130,
                                   height: 130,
                                   fit: BoxFit.fitWidth,
                                   cache: true,
                                   shape: BoxShape.rectangle,
                                 ),
-                              Container(margin : EdgeInsets.only(top: 15),child: Text("HELLO"  ,style: TextStyle(color: Colors.white)))],
+                              Container(margin : EdgeInsets.only(top: 10),child: Text(getName(index)  ,style: TextStyle(color: Colors.white)))],
                             ),
                           ),
                         onPressed: printText,
                       ),
-                    ),
-                    growable : true),
-                ))));
+                    );
+                  },
+                   ),
+                )));
   }
 }
