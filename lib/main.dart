@@ -67,13 +67,17 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                             width: 180,
                             height: 180,
                             margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            child: ExtendedImage.network(
-                              "https://pokeres.bastionbot.org/images/pokemon/$index.png",
-                              width: 170,
-                              height: 170,
-                              fit: BoxFit.fitWidth,
-                              cache: true,
-                              shape: BoxShape.rectangle,
+                            child: Column(
+                              children: [
+                                ExtendedImage.network(
+                                  "https://pokeres.bastionbot.org/images/pokemon/$index.png",
+                                  width: 130,
+                                  height: 130,
+                                  fit: BoxFit.fitWidth,
+                                  cache: true,
+                                  shape: BoxShape.rectangle,
+                                ),
+                              Container(margin : EdgeInsets.only(top: 15),child: Text("HELLO"  ,style: TextStyle(color: Colors.white)))],
                             ),
                           ),
                         onPressed: printText,
