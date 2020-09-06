@@ -46,25 +46,31 @@ class _DetailedPageState extends State<DetailedPage> {
           children: [
             SizedBox(
               width: double.infinity,
-              child: Container(
-                width: 100,
-                height: 400,
-                color: pokemon.backGroundColor,
-                child: Center(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 100),
-                    child: ExtendedImage.network(
-                      "https://pokeres.bastionbot.org/images/pokemon/$imageIndex.png",
-                      fit: BoxFit.fitWidth,
-                      cache: true,
-                      shape: BoxShape.rectangle,
+              child: Stack(children: [
+                Container(
+                  height: 800,
+                  color: Colors.black,
+                ),
+                Container(
+                  height: 400,
+                  decoration: BoxDecoration(
+                      color: pokemon.backGroundColor,
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(60),
+                          bottomRight: Radius.circular(60))),
+                  child: Center(
+                    child: Container(
+                      margin: EdgeInsets.only(top: 100),
+                      child: ExtendedImage.network(
+                        "https://pokeres.bastionbot.org/images/pokemon/$imageIndex.png",
+                        fit: BoxFit.fitWidth,
+                        cache: true,
+                        shape: BoxShape.rectangle,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-            Container(
-              child: Text("HEELO"),
+              ]),
             )
           ],
         ),
