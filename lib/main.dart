@@ -95,7 +95,7 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                         Color color;
                         if (snapshot.hasData) {
                           color = snapshot.data;
-                          _getPokemon(index).backGroundColor = color;
+                          _getPokemon(index)?.backGroundColor = color;
                         } else {
                           color = Colors.transparent;
                         }
