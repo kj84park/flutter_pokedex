@@ -7,6 +7,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pokedex/network/poke_dex_client.dart';
+import 'package:flutter_pokedex/page/detailed_page.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 import 'data/pokemon_lists.dart';
@@ -36,22 +37,18 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
     });
   }
 
-  String _getName(int index){
-    if(_pokemonList == null){
+  String _getName(int index) {
+    if (_pokemonList == null) {
       return "";
     }
     final pokemonMap = _pokemonList.asMap();
     return pokemonMap[index].name;
   }
 
-  Future<Color> _getImagePalette (ImageProvider imageProvider) async {
-    final PaletteGenerator paletteGenerator = await PaletteGenerator
-        .fromImageProvider(imageProvider);
-      return paletteGenerator.dominantColor.color;
-  }
-
-  void _printText(){
-    print("aaaaa");
+  Future<Color> _getImagePalette(ImageProvider imageProvider) async {
+    final PaletteGenerator paletteGenerator =
+        await PaletteGenerator.fromImageProvider(imageProvider);
+    return paletteGenerator.dominantColor.color;
   }
 
   @override
@@ -65,57 +62,66 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
               actions: <Widget>[],
             ),
             body: Padding(
-                padding: const EdgeInsets.all(1.0),
-                child: GridView.builder(
-                  key: _listKey,
-                  itemCount: 20,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2
-                  ),
-                  itemBuilder:(context,index) {
-                    int imageIndex = index+1;
-                    var image = ExtendedImage.network(
-                      "https://pokeres.bastionbot.org/images/pokemon/$imageIndex.png",
-                      width: 130,
-                      height: 130,
-                      fit: BoxFit.fitWidth,
-                      cache: true,
-                      shape: BoxShape.rectangle,
-                    );
+              padding: const EdgeInsets.all(1.0),
+              child: GridView.builder(
+                key: _listKey,
+                itemCount: 20,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2),
+                itemBuilder: (context, index) {
+                  int imageIndex = index + 1;
+                  var image = ExtendedImage.network(
+                    "https://pokeres.bastionbot.org/images/pokemon/$imageIndex.png",
+                    width: 130,
+                    height: 130,
+                    fit: BoxFit.fitWidth,
+                    cache: true,
+                    shape: BoxShape.rectangle,
+                  );
 
-                    return SafeArea(
-                      minimum: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                      child: FutureBuilder(
-                        future: _getImagePalette(image.image),
-                        builder: (context, snapshot){
+                  return SafeArea(
+                    minimum: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    child: FutureBuilder(
+                      future: _getImagePalette(image.image),
+                      builder: (context, snapshot) {
+                        Color color;
+                        if (snapshot.hasData) {
+                          color = snapshot.data;
+                        } else {
+                          color = Colors.transparent;
+                        }
 
-                          Color color;
-                          if(snapshot.hasData){
-                            color = snapshot.data;
-                          } else {
-                            color = Colors.transparent;
-                          }
-
-                          return FlatButton(
-                          color:color,
+                        return FlatButton(
+                          color: color,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0)),
-                            child: Container(
-                              width: 180,
-                              height: 180,
-                              margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
-                              child: Column(
-                                children: [
-                                  image,
-                                Container(margin : EdgeInsets.only(top: 10),child: Text(_getName(index)  ,style: TextStyle(color: Colors.white)))],
-                              ),
+                          child: Container(
+                            width: 180,
+                            height: 180,
+                            margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
+                            child: Column(
+                              children: [
+                                image,
+                                Container(
+                                    margin: EdgeInsets.only(top: 10),
+                                    child: Text(_getName(index),
+                                        style: TextStyle(color: Colors.white)))
+                              ],
                             ),
-                          onPressed: _printText,
-                        );},
-                      ),
-                    );
-                  },
-                   ),
-                )));
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                    pageBuilder: (_,__,___) => DetailedPage(index),
+                                transitionDuration: Duration(seconds: 0)));
+                          }
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+            )));
   }
 }
