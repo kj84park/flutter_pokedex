@@ -5,10 +5,9 @@
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_pokedex/network/poke_dex_client.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 import 'data/pokemon_lists.dart';
 
@@ -24,6 +23,7 @@ class AnimatedListSample extends StatefulWidget {
 class _AnimatedListSampleState extends State<AnimatedListSample> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   List<PokemonLists> _pokemonList;
+  Color color = Colors.transparent;
 
   @override
   void initState() {
@@ -36,7 +36,7 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
     });
   }
 
-  String getName(int index){
+  String _getName(int index){
     if(_pokemonList == null){
       return "";
     }
@@ -44,13 +44,18 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
     return pokemonMap[index].name;
   }
 
-  void printText(){
+  Future<Color> _getImagePalette (ImageProvider imageProvider) async {
+    final PaletteGenerator paletteGenerator = await PaletteGenerator
+        .fromImageProvider(imageProvider);
+      return paletteGenerator.dominantColor.color;
+  }
+
+  void _printText(){
     print("aaaaa");
   }
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
         home: Scaffold(
             backgroundColor: Colors.blueGrey,
@@ -69,30 +74,44 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                   ),
                   itemBuilder:(context,index) {
                     int imageIndex = index+1;
+                    var image = ExtendedImage.network(
+                      "https://pokeres.bastionbot.org/images/pokemon/$imageIndex.png",
+                      width: 130,
+                      height: 130,
+                      fit: BoxFit.fitWidth,
+                      cache: true,
+                      shape: BoxShape.rectangle,
+                    );
+
                     return SafeArea(
                       minimum: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                      child: FlatButton(
-                        color: Colors.amberAccent,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0)),
-                          child: Container(
-                            width: 180,
-                            height: 180,
-                            margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
-                            child: Column(
-                              children: [
-                                ExtendedImage.network(
-                                  "https://pokeres.bastionbot.org/images/pokemon/$imageIndex.png",
-                                  width: 130,
-                                  height: 130,
-                                  fit: BoxFit.fitWidth,
-                                  cache: true,
-                                  shape: BoxShape.rectangle,
-                                ),
-                              Container(margin : EdgeInsets.only(top: 10),child: Text(getName(index)  ,style: TextStyle(color: Colors.white)))],
+                      child: FutureBuilder(
+                        future: _getImagePalette(image.image),
+                        builder: (context, snapshot){
+
+                          Color color;
+                          if(snapshot.hasData){
+                            color = snapshot.data;
+                          } else {
+                            color = Colors.transparent;
+                          }
+
+                          return FlatButton(
+                          color:color,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0)),
+                            child: Container(
+                              width: 180,
+                              height: 180,
+                              margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
+                              child: Column(
+                                children: [
+                                  image,
+                                Container(margin : EdgeInsets.only(top: 10),child: Text(_getName(index)  ,style: TextStyle(color: Colors.white)))],
+                              ),
                             ),
-                          ),
-                        onPressed: printText,
+                          onPressed: _printText,
+                        );},
                       ),
                     );
                   },
