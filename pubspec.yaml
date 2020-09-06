@@ -25,7 +25,7 @@ dependencies:
     sdk: flutter
 
   dio: 3.0.10
-
+  intl: ">=0.14.0"
   extended_image: ^1.1.1
   palette_generator: ^0.2.3
 

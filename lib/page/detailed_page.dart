@@ -1,41 +1,73 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pokedex/data/pokemon_lists.dart';
+import 'package:intl/intl.dart';
 
 class DetailedPage extends StatefulWidget {
   final int index;
+  final PokemonLists pokemon;
 
-  DetailedPage(this.index);
+  DetailedPage(this.index, this.pokemon);
 
   @override
-  _DetailedPageState createState() => _DetailedPageState(this.index);
+  _DetailedPageState createState() =>
+      _DetailedPageState(this.index, this.pokemon);
 }
 
 class _DetailedPageState extends State<DetailedPage> {
   final int index;
+  final PokemonLists pokemon;
 
-  _DetailedPageState(this.index);
+  _DetailedPageState(this.index, this.pokemon);
 
   @override
   Widget build(BuildContext context) {
     int imageIndex = index + 1;
 
+    print("BC : " + pokemon.backGroundColor.toString());
+    final formatter = NumberFormat("000");
+    final indexString = formatter.format(index);
+
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.transparent),
-        body: Padding(
-        padding: const EdgeInsets.all(1.0),
-        child: Center(
-            child: Container(
-                width: 180,
-                height: 180,
-                margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
-                child: ExtendedImage.network(
-                  "https://pokeres.bastionbot.org/images/pokemon/$imageIndex.png",
-                  width: 130,
-                  height: 130,
-                  fit: BoxFit.fitWidth,
-                  cache: true,
-                  shape: BoxShape.rectangle,
-                ))),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text("Pokedex"),
+          Container(
+              margin: EdgeInsets.only(right: 5), child: Text("#$indexString"))
+        ]),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(),
+        child: Column(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              child: Container(
+                width: 100,
+                height: 400,
+                color: pokemon.backGroundColor,
+                child: Center(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 100),
+                    child: ExtendedImage.network(
+                      "https://pokeres.bastionbot.org/images/pokemon/$imageIndex.png",
+                      fit: BoxFit.fitWidth,
+                      cache: true,
+                      shape: BoxShape.rectangle,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              child: Text("HEELO"),
+            )
+          ],
+        ),
       ),
     );
   }

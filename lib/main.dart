@@ -45,6 +45,14 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
     return pokemonMap[index].name;
   }
 
+  PokemonLists _getPokemon(int index) {
+    if (_pokemonList == null) {
+      return null;
+    }
+    final pokemonMap = _pokemonList.asMap();
+    return pokemonMap[index];
+  }
+
   Future<Color> _getImagePalette(ImageProvider imageProvider) async {
     final PaletteGenerator paletteGenerator =
         await PaletteGenerator.fromImageProvider(imageProvider);
@@ -87,6 +95,7 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                         Color color;
                         if (snapshot.hasData) {
                           color = snapshot.data;
+                          _getPokemon(index).backGroundColor = color;
                         } else {
                           color = Colors.transparent;
                         }
@@ -113,7 +122,7 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                             Navigator.push(
                                 context,
                                 PageRouteBuilder(
-                                    pageBuilder: (_,__,___) => DetailedPage(index),
+                                    pageBuilder: (_,__,___) => DetailedPage(index,_getPokemon(index)),
                                 transitionDuration: Duration(seconds: 0)));
                           }
                         );
