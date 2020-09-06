@@ -42,16 +42,13 @@ class _DetailedPageState extends State<DetailedPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(),
-        child: Column(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: Stack(children: [
-                Container(
-                  height: 800,
-                  color: Colors.black,
-                ),
-                Container(
+        child: Container(
+          color: Colors.black,
+          child: Column(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: Container(
                   height: 400,
                   decoration: BoxDecoration(
                       color: pokemon.backGroundColor,
@@ -70,9 +67,9 @@ class _DetailedPageState extends State<DetailedPage> {
                     ),
                   ),
                 ),
-              ]),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
