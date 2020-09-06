@@ -49,7 +49,7 @@ class _DetailedPageState extends State<DetailedPage> {
               SizedBox(
                 width: double.infinity,
                 child: Container(
-                  height: 400,
+                  height: 300,
                   decoration: BoxDecoration(
                       color: pokemon.backGroundColor,
                       borderRadius: BorderRadius.only(
@@ -57,7 +57,7 @@ class _DetailedPageState extends State<DetailedPage> {
                           bottomRight: Radius.circular(60))),
                   child: Center(
                     child: Container(
-                      margin: EdgeInsets.only(top: 100),
+                      margin: EdgeInsets.only(top: 80),
                       child: ExtendedImage.network(
                         "https://pokeres.bastionbot.org/images/pokemon/$imageIndex.png",
                         fit: BoxFit.fitWidth,
@@ -66,6 +66,50 @@ class _DetailedPageState extends State<DetailedPage> {
                       ),
                     ),
                   ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 20),
+                child: Column(
+                  children: [
+                    Text(pokemon.name,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 40)),
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      child: Text("To be continue..",
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 40)),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      child: Text("------",
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 40)),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      child: Text("------",
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 40)),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      child: Text("------",
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 40)),
+                    ),
+                  ],
                 ),
               )
             ],
